@@ -142,7 +142,9 @@ class Controller {
     bool loadAction;                                                    // Flag to trigger file loading
     bool saveAction;                                                    // Flag to trigger file saving
     uint16_t fileLibrarySize;                                           // Total projects found on SD
-    uint16_t drumkitLibrarySize;                                        // Total drum kits found on SD
+    uint16_t drumkitLibrarySize;                                        // Total kit folders found in /Kits
+    char drumkitLibrary[kDrumkitLibrarySize][kFileNameSize];            // Sorted kit folder names
+    char drumkitSelectedName[kFileNameSize];                            // Name of kit at drumkitMenuCounter
     uint16_t instLibrarySize;                                           // Total instruments found on SD
     uint16_t sampleLibrarySize[kInstLibraryMaxSize];                    // Sample count per instrument folder
     uint32_t totalSampleLibrarySize;
@@ -470,6 +472,13 @@ class Controller {
     SdResult sd_loadDrumkit(uint8_t kitNum_);
     SdResult sd_saveDrumkit(uint8_t kitNum_);
     SdResult sd_clearDrumkit(uint8_t kitNum_);
+    void sd_encodeDrumkitData(uint8_t* data_);
+    void sd_decodeDrumkitData(const char* data_);
+    void sd_buildInstFolderPath(const char* instName_, char* out_, size_t outSize_);
+    void sd_buildInstIndexPath(const char* instName_, char* out_, size_t outSize_);
+    void sd_buildKitSettingsPath(const char* kitName_, char* out_, size_t outSize_);
+    int16_t sd_findInstIndex(const char* instName_);
+    void drumkit_resetAll();
     SdResult sd_checkSamplesInUse();
     FRESULT sd_createDirectory(const char* path);
     FRESULT sd_deleteDirectory(const char* path);
@@ -545,6 +554,7 @@ class Controller {
     void lcd_drawDrumkit_LoadData();
     void lcd_drawDrumkit_SaveData();
     void lcd_drawDrumkit_ClearData();
+    void lcd_drawDrumkit_KitData(uint8_t tab_);
     // Mixer menu functions
     void lcd_drawMixerMenu();
     void lcd_drawMixer_MasterVolumeData();

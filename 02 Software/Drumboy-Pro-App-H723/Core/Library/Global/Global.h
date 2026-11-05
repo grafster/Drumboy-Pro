@@ -1726,14 +1726,19 @@ const uint8_t kMaxFile                              = 99;
 ////////////////////////////////////////////////////////////////////////////////
 
 const char kDrumkitRef[]                            = "RW_DRUMBOYPRO_DRUMKIT    ";
-const char kDrumkitStart[]                          = "System/Drumkit/Drumkit_";
-const char kDrumkitEnd[]                            = ".rwd";
+
+// Folder-based drum kits:
+//   Kits/<Kit Name>/01-Something.wav ... 10-Something.wav   (leading number = layer 1..10)
+//   Kits/<Kit Name>/Kit.rwd                                  (optional saved settings)
+// Kit folders are also registered in the instrument library with a '>' prefix
+// ('>' is illegal in FAT names, so it can never collide with a Sample/ folder).
+const char kKitFolder[]                             = "Kits";
+const char kKitSettingsFile[]                       = "Kit.rwd";
+const char kKitIndexFolder[]                        = "System/Data/Kits";
+const char kKitInstPrefix                           = '>';
 
 const uint16_t kDrumkitByteSize                     = 1500;
-const uint8_t kDrumkitLibrarySize                   = 100;
-
-const uint8_t kMinDrumkit                           = 0;
-const uint8_t kMaxDrumkit                           = 99;
+const uint8_t kDrumkitLibrarySize                   = 100;      // Max kit folders indexed (drumkitMenuCounter is int8_t)
 
 const uint16_t kSongByteSize                        = 1286;
 
@@ -6356,8 +6361,8 @@ const struct FrequencyData kFrequencyDataLibrary[] = {
 
 struct InstData {
     char num[4 + 1]                                 = "----";
-    char fileName[kFileNameSize + 10]               = "";  // Data/InstName.ins
-    char folderName[kFileNameSize + 10]             = "";
+    char fileName[kFileNameSize + 24]               = "";  // System/Data/InstName.ins or System/Data/Kits/KitName.ins
+    char folderName[kFileNameSize + 24]             = "";  // Sample/InstName/ or Kits/KitName/
     char nameLong[kFileNameSize + 1]                = "";
     char nameShortL[12 + 1]                         = "------------";
     char nameShortR[10 + 1]                         = "----------";
@@ -6365,7 +6370,7 @@ struct InstData {
 
 struct SampleData {
     char num[4 + 1]                                 = "----";
-    char fileName[(kFileNameSize * 2) + 10]         = "";  // Sample/InstName/SampleName.wav
+    char fileName[(kFileNameSize * 2) + 24]         = "";  // Sample/InstName/SampleName.wav
     char nameLong[kFileNameSize + 1]                = "";
     char nameShortR[10 + 1]                         = "----------";
 

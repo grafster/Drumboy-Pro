@@ -4691,40 +4691,36 @@ SdResult Controller::sd_initialize() {
                 if (sd_checkFolderExist("System") == SD_OK) {
                     if (sd_checkFolderExist("Sample") == SD_OK) {
                         if (sd_checkFolderExist("System/File") == SD_OK) {
-                            if (sd_checkFolderExist("System/Drumkit") == SD_OK) {
-                                if (sd_checkFolderExist("System/Image") == SD_OK) {
-                                    if (sd_checkFolderExist("System/Firmware") == SD_OK) {
-                                        // 4. REQUIRED PRESET FILE VALIDATION
-                                        // Ensure core preset binaries exist before continuing
-                                        if ((sd_checkFolderExist("System/Preset") == SD_OK) &&
-                                            (sd_checkFileExist("System/Preset/System.rwp") == SD_OK) &&
-                                            (sd_checkFileExist("System/Preset/Encoder.rwp") == SD_OK)) {
-                                            // 5. UI ASSET PRELOAD (SD -> SDRAM)
-                                            // Load startup/menu graphics to RAM for immediate rendering
-                                            if ((sd_loadImage("System/Image/Image_Logo.rwi", RAM_IMAGE_LOGO_PALETTE_ADDRESS, RAM_IMAGE_LOGO_DATA_ADDRESS, kImageLogoPalette, kImageLogoWidth, kImageLogoHeight, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Image_Menu_A.rwi", RAM_IMAGE_MENU_A_PALETTE_ADDRESS, RAM_IMAGE_MENU_A_DATA_ADDRESS, kImageMenuAPalette, kImageMenuAWidth, kImageMenuAHeight, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Image_Menu_B.rwi", RAM_IMAGE_MENU_B_PALETTE_ADDRESS, RAM_IMAGE_MENU_B_DATA_ADDRESS, kImageMenuBPalette, kImageMenuBWidth, kImageMenuBHeight, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Image_Layer_A.rwi", RAM_IMAGE_LAYER_A_PALETTE_ADDRESS, RAM_IMAGE_LAYER_A_DATA_ADDRESS, kImageLayerPalette, kImageLayerWidth, kImageLayerHeight, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Image_Layer_B.rwi", RAM_IMAGE_LAYER_B_PALETTE_ADDRESS, RAM_IMAGE_LAYER_B_DATA_ADDRESS, kImageLayerPalette, kImageLayerWidth, kImageLayerHeight, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Icon_Select.rwi", RAM_ICON_SELECT_PALETTE_ADDRESS, RAM_ICON_SELECT_DATA_ADDRESS, kIconPalette, kIconSelectWidth, kIconSelectHeight * 2, RGB16) == SD_OK) &&
-                                                (sd_loadImage("System/Image/Icon_Play.rwi", RAM_ICON_PLAY_PALETTE_ADDRESS, RAM_ICON_PLAY_DATA_ADDRESS, kIconPalette, kIconPlayWidth, kIconPlayHeight * 8, RGB16) == SD_OK)) {
-                                                sd.ready = true;
-                                                sd.getLibrary = true;  // Signal that we can now index the sample libraries
-                                                sdResult = SD_OK;
-                                            } else {
-                                                sdResult = SD_ERROR_SYSTEMFILE;
-                                            }
+                            if (sd_checkFolderExist("System/Image") == SD_OK) {
+                                if (sd_checkFolderExist("System/Firmware") == SD_OK) {
+                                    // 4. REQUIRED PRESET FILE VALIDATION
+                                    // Ensure core preset binaries exist before continuing
+                                    if ((sd_checkFolderExist("System/Preset") == SD_OK) &&
+                                        (sd_checkFileExist("System/Preset/System.rwp") == SD_OK) &&
+                                        (sd_checkFileExist("System/Preset/Encoder.rwp") == SD_OK)) {
+                                        // 5. UI ASSET PRELOAD (SD -> SDRAM)
+                                        // Load startup/menu graphics to RAM for immediate rendering
+                                        if ((sd_loadImage("System/Image/Image_Logo.rwi", RAM_IMAGE_LOGO_PALETTE_ADDRESS, RAM_IMAGE_LOGO_DATA_ADDRESS, kImageLogoPalette, kImageLogoWidth, kImageLogoHeight, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Image_Menu_A.rwi", RAM_IMAGE_MENU_A_PALETTE_ADDRESS, RAM_IMAGE_MENU_A_DATA_ADDRESS, kImageMenuAPalette, kImageMenuAWidth, kImageMenuAHeight, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Image_Menu_B.rwi", RAM_IMAGE_MENU_B_PALETTE_ADDRESS, RAM_IMAGE_MENU_B_DATA_ADDRESS, kImageMenuBPalette, kImageMenuBWidth, kImageMenuBHeight, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Image_Layer_A.rwi", RAM_IMAGE_LAYER_A_PALETTE_ADDRESS, RAM_IMAGE_LAYER_A_DATA_ADDRESS, kImageLayerPalette, kImageLayerWidth, kImageLayerHeight, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Image_Layer_B.rwi", RAM_IMAGE_LAYER_B_PALETTE_ADDRESS, RAM_IMAGE_LAYER_B_DATA_ADDRESS, kImageLayerPalette, kImageLayerWidth, kImageLayerHeight, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Icon_Select.rwi", RAM_ICON_SELECT_PALETTE_ADDRESS, RAM_ICON_SELECT_DATA_ADDRESS, kIconPalette, kIconSelectWidth, kIconSelectHeight * 2, RGB16) == SD_OK) &&
+                                            (sd_loadImage("System/Image/Icon_Play.rwi", RAM_ICON_PLAY_PALETTE_ADDRESS, RAM_ICON_PLAY_DATA_ADDRESS, kIconPalette, kIconPlayWidth, kIconPlayHeight * 8, RGB16) == SD_OK)) {
+                                            sd.ready = true;
+                                            sd.getLibrary = true;  // Signal that we can now index the sample libraries
+                                            sdResult = SD_OK;
                                         } else {
-                                            sdResult = SD_ERROR_PRESETFOLDER;
+                                            sdResult = SD_ERROR_SYSTEMFILE;
                                         }
                                     } else {
-                                        sdResult = SD_ERROR_FIRMWAREFOLDER;
+                                        sdResult = SD_ERROR_PRESETFOLDER;
                                     }
                                 } else {
-                                    sdResult = SD_ERROR_IMAGEFOLDER;
+                                    sdResult = SD_ERROR_FIRMWAREFOLDER;
                                 }
                             } else {
-                                sdResult = SD_ERROR_DRUMKITFOLDER;
+                                sdResult = SD_ERROR_IMAGEFOLDER;
                             }
                         } else {
                             sdResult = SD_ERROR_FILEFOLDER;
@@ -4793,26 +4789,22 @@ SdResult Controller::sd_reinitialize() {
                     if (sd_checkFolderExist("System") == SD_OK) {
                         if (sd_checkFolderExist("Sample") == SD_OK) {
                             if (sd_checkFolderExist("System/File") == SD_OK) {
-                                if (sd_checkFolderExist("System/Drumkit") == SD_OK) {
-                                    if (sd_checkFolderExist("System/Image") == SD_OK) {
-                                        if (sd_checkFolderExist("System/Firmware") == SD_OK) {
-                                            if ((sd_checkFolderExist("System/Preset") == SD_OK) &&
-                                                (sd_checkFileExist("System/Preset/System.rwp") == SD_OK) &&
-                                                (sd_checkFileExist("System/Preset/Encoder.rwp") == SD_OK)) {
-                                                sd.ready = true;
-                                                sd.getLibrary = true;
-                                                sdResult = SD_OK;
-                                            } else {
-                                                sdResult = SD_ERROR_PRESETFOLDER;
-                                            }
+                                if (sd_checkFolderExist("System/Image") == SD_OK) {
+                                    if (sd_checkFolderExist("System/Firmware") == SD_OK) {
+                                        if ((sd_checkFolderExist("System/Preset") == SD_OK) &&
+                                            (sd_checkFileExist("System/Preset/System.rwp") == SD_OK) &&
+                                            (sd_checkFileExist("System/Preset/Encoder.rwp") == SD_OK)) {
+                                            sd.ready = true;
+                                            sd.getLibrary = true;
+                                            sdResult = SD_OK;
                                         } else {
-                                            sdResult = SD_ERROR_FIRMWAREFOLDER;
+                                            sdResult = SD_ERROR_PRESETFOLDER;
                                         }
                                     } else {
-                                        sdResult = SD_ERROR_IMAGEFOLDER;
+                                        sdResult = SD_ERROR_FIRMWAREFOLDER;
                                     }
                                 } else {
-                                    sdResult = SD_ERROR_DRUMKITFOLDER;
+                                    sdResult = SD_ERROR_IMAGEFOLDER;
                                 }
                             } else {
                                 sdResult = SD_ERROR_FILEFOLDER;
@@ -5121,60 +5113,46 @@ SdResult Controller::sd_getFileLibrary() {
     return result;
 }
 
-SdResult Controller::sd_getDrumkitLibrary() {
-    /// @brief Indexes existing drumkit presets and counts valid entries marked with an asterisk.
-    /// Scans the 'System/Drumkit' directory for available drumkit slots.
+static int compareKitNames(const void* a_, const void* b_) {
+    return strcmp((const char*)a_, (const char*)b_);
+}
 
-    SdResult result = SD_ERROR;
-    char refRead[sizeof(kDrumkitRef)] = {};
-    char data;
+SdResult Controller::sd_getDrumkitLibrary() {
+    /// @brief Indexes kit folders under '/Kits' into the sorted drumkitLibrary name table.
+    /// Each sub-folder is one kit; names must be shorter than kFileNameSize - 1 characters
+    /// (one byte is reserved for the '>' prefix used in the instrument library).
 
     // 1. INPUT PROTECTION
-    // Disable keyboard interrupts to prevent I2C bus collisions during heavy SD read operations.
     keyboard_disable();
     drumkitLibrarySize = 0;
+    memset(drumkitLibrary, 0x00, sizeof(drumkitLibrary));
 
-    // 2. SLOT-BASED SCANNING LOOP
-    // Iterate through all possible drumkit slots defined by kDrumkitLibrarySize.
-    for (uint8_t i = 0; i < kDrumkitLibrarySize; i++) {
-        char fileName[50];
-        char fileNum[3];
-
-        // 3. FILENAME GENERATION
-        // Format the current index into a 3-digit string (e.g., Drumkit_001.rwd).
-        sprintf(fileNum, "%03d", (i + 1));
-        strcpy(fileName, kDrumkitStart);
-        strcat(fileName, fileNum);
-        strcat(fileName, kDrumkitEnd);
-
-        // 4. HEADER VALIDATION
-        // Attempt to open the drumkit file. If it exists, verify its internal marker.
-        if (f_open(&sd.file, fileName, FA_READ) == FR_OK) {
-            // Read the reference header string to ensure file type compatibility.
-            if (f_read(&sd.file, refRead, strlen(kDrumkitRef), &sd.bytesread) == 0) {
-                // Read the occupancy marker character immediately after the header.
-                if (f_read(&sd.file, &data, 1, &sd.bytesread) == FR_OK) {
-                    // 5. VALIDITY CHECK
-                    // An asterisk '*' confirms this slot is active and contains user data.
-                    if (data == '*') {
-                        drumkitLibrarySize += 1;
-                    }
-                }
+    // 2. FOLDER SCAN
+    // The Kits folder is optional; an absent folder simply yields an empty library.
+    DIR dir;
+    FILINFO fileInfo;
+    if (f_opendir(&dir, kKitFolder) == FR_OK) {
+        while (drumkitLibrarySize < kDrumkitLibrarySize) {
+            if ((f_readdir(&dir, &fileInfo) != FR_OK) || (fileInfo.fname[0] == 0)) break;
+            if ((fileInfo.fattrib & AM_DIR) &&
+                !(fileInfo.fattrib & AM_HID) &&
+                (fileInfo.fname[0] != '.') &&
+                (strlen(fileInfo.fname) < (kFileNameSize - 1))) {
+                strncpy(drumkitLibrary[drumkitLibrarySize], fileInfo.fname, kFileNameSize - 1);
+                drumkitLibrarySize++;
             }
         }
-
-        // 6. RESOURCE CLEANUP
-        // Close the file handle before the next iteration to avoid reaching the FatFS handle limit.
-        f_close(&sd.file);
+        f_closedir(&dir);
     }
 
-    result = SD_OK;
+    // 3. ALPHABETICAL SORTING
+    if (drumkitLibrarySize > 1) {
+        qsort(drumkitLibrary, drumkitLibrarySize, kFileNameSize, compareKitNames);
+    }
 
-    // 7. INPUT RESTORATION
-    // Re-enable keyboard interrupts once the SD card bus is idle.
+    // 4. INPUT RESTORATION
     keyboard_enable();
-
-    return result;
+    return SD_OK;
 }
 
 void Controller::sd_getInstLibrary() {
@@ -5225,6 +5203,29 @@ void Controller::sd_getInstLibrary() {
         f_closedir(&sd.dir);
     }
 
+    // 3. KIT FOLDER SCAN
+    // Register each 'Kits/<Name>' folder as instrument '>Name' so kit samples can be
+    // browsed/loaded per layer through the normal instrument path.
+    if (f_opendir(&sd.dir, kKitFolder) == FR_OK) {
+        while (instLibrarySize < kInstLibraryMaxSize) {
+            if (f_readdir(&sd.dir, &sd.fileInfo) != FR_OK || sd.fileInfo.fname[0] == 0) {
+                break;
+            }
+            if ((sd.fileInfo.fattrib & AM_DIR) &&
+                !(sd.fileInfo.fattrib & AM_HID) &&
+                (sd.fileInfo.fname[0] != '.') &&
+                (strlen(sd.fileInfo.fname) < (kFileNameSize - 1))) {
+                char* entryPtr = ramPtr + (instLibrarySize * kFileNameSize);
+                memset(entryPtr, 0, kFileNameSize);
+                entryPtr[0] = kKitInstPrefix;
+                strncpy(entryPtr + 1, sd.fileInfo.fname, kFileNameSize - 2);
+                sortArray[instLibrarySize] = entryPtr;
+                instLibrarySize++;
+            }
+        }
+        f_closedir(&sd.dir);
+    }
+
     // 6. ALPHABETICAL SORTING
     // Reorganize the pointer array so the UI displays folders in A-Z order.
     if (instLibrarySize > 0) {
@@ -5235,6 +5236,9 @@ void Controller::sd_getInstLibrary() {
     // Ensure the System/Data path exists before attempting to write the library file.
     if (f_stat("System/Data", &sd.fileInfo) != FR_OK) {
         f_mkdir("System/Data");
+    }
+    if (f_stat(kKitIndexFolder, &sd.fileInfo) != FR_OK) {
+        f_mkdir(kKitIndexFolder);
     }
 
     // 8. LIBRARY FILE GENERATION
@@ -5310,7 +5314,7 @@ void Controller::sd_getSampleLibrary() {
 
             // 5. SAMPLE DIRECTORY SCAN
             // Open the specific category folder (e.g., 'Sample/Kicks') on the SD card.
-            snprintf(pathBuffer, sizeof(pathBuffer), "Sample/%s", instName);
+            sd_buildInstFolderPath(instName, pathBuffer, sizeof(pathBuffer));
             if (f_opendir(&sd.dir, pathBuffer) == FR_OK) {
                 while (sampleLibrarySize[i] < kInstSampleLibraryMaxSize) {
                     if (f_readdir(&sd.dir, &sd.fileInfo) != FR_OK || sd.fileInfo.fname[0] == 0) {
@@ -5346,7 +5350,7 @@ void Controller::sd_getSampleLibrary() {
 
             // 9. METADATA FILE GENERATION
             // Create a specialized .ins file to cache the sorted list for this instrument.
-            snprintf(pathBuffer, sizeof(pathBuffer), "System/Data/%s.ins", instName);
+            sd_buildInstIndexPath(instName, pathBuffer, sizeof(pathBuffer));
             if (f_open(&sd.file, pathBuffer, FA_WRITE | FA_CREATE_ALWAYS) == FR_OK) {
                 // 10. SIGNATURE WRITE
                 // Mark the file with the 'RW_DRUMBOY_SAMPLE' header.
@@ -5686,9 +5690,8 @@ SdResult Controller::sd_loadFile(uint8_t fileNum_) {
 
                         // Sample lookup in per-instrument index
                         if ((sampleActive[i]) && (instActive[i]) && (!instMissing[i])) {
-                            char instFileName[kFileNameSize + 15] = "System/Data/";
-                            strncat(instFileName, instName[i], kFileNameSize);
-                            strncat(instFileName, ".ins", 4);
+                            char instFileName[96];
+                            sd_buildInstIndexPath(instName[i], instFileName, sizeof(instFileName));
                             if ((f_open(&sd.file, instFileName, FA_READ) == FR_OK) && (f_lseek(&sd.file, 25) == FR_OK)) {
                                 char searchName[kFileNameSize + 1];
                                 bool searchActive = true;
@@ -6201,669 +6204,549 @@ SdResult Controller::sd_clearFile(uint8_t fileNum_) {
     return result;
 }
 
-SdResult Controller::sd_checkDrumkit(uint8_t kitNum_) {
-    /// @brief Validates a drumkit file's existence and internal status before loading.
-    /// Categorizes the slot to prevent loading empty or corrupt drumkit data.
+void Controller::sd_buildInstFolderPath(const char* instName_, char* out_, size_t outSize_) {
+    /// @brief Builds the SD folder path (no trailing slash) for an instrument library entry.
+    /// Normal entries map to 'Sample/<Name>', kit entries ('>' prefix) map to 'Kits/<Name>'.
 
-    SdResult result = SD_ERROR;
-    drumkitStatus = FILE_NONE;
-    char refRead[sizeof(kDrumkitRef)] = {};
-    char data;
+    if (instName_[0] == kKitInstPrefix) {
+        snprintf(out_, outSize_, "%s/%s", kKitFolder, instName_ + 1);
+    } else {
+        snprintf(out_, outSize_, "Sample/%s", instName_);
+    }
+}
 
-    // 1. FILENAME CONSTRUCTION
-    // Construct the 3-digit padded filename (e.g., Drumkit_001.rws).
-    char drumkitName[50];
-    char drumkitNum[4];
-    sprintf(drumkitNum, "%03d", (kitNum_ + 1));
-    strcpy(drumkitName, kDrumkitStart);
-    strcat(drumkitName, drumkitNum);
-    strcat(drumkitName, kDrumkitEnd);
+void Controller::sd_buildInstIndexPath(const char* instName_, char* out_, size_t outSize_) {
+    /// @brief Builds the cached sample-index (.ins) path for an instrument library entry.
+    /// Kit entries are cached in a separate subfolder so they can never collide with Sample/ names.
 
-    // 2. FILE ACCESS
-    // Attempt to open the file. If it fails, the file is physically missing.
-    if (f_open(&sd.file, drumkitName, FA_READ) == FR_OK) {
-        // 3. SIGNATURE VERIFICATION
-        // Read the file header and compare it against the global kDrumkitRef string.
-        if (f_read(&sd.file, refRead, strlen(kDrumkitRef), &sd.bytesread) == FR_OK) {
-            if (strncmp(kDrumkitRef, refRead, strlen(kDrumkitRef)) == 0) {
-                // 4. OCCUPANCY CHECK
-                // If the signature matches, read the status byte. '*' denotes a saved drumkit.
-                f_read(&sd.file, &data, 1, &sd.bytesread);
-                (data == '*') ? drumkitStatus = FILE_ACTIVE : drumkitStatus = FILE_INACTIVE;
-            } else {
-                // 5. COMPATIBILITY HANDLING
-                // The file exists but the header is unrecognized or from an older version.
-                drumkitStatus = FILE_INCOMPATIBLE;
+    if (instName_[0] == kKitInstPrefix) {
+        snprintf(out_, outSize_, "%s/%s.ins", kKitIndexFolder, instName_ + 1);
+    } else {
+        snprintf(out_, outSize_, "System/Data/%s.ins", instName_);
+    }
+}
+
+void Controller::sd_buildKitSettingsPath(const char* kitName_, char* out_, size_t outSize_) {
+    /// @brief Builds the optional settings file path for a kit folder ('Kits/<Name>/Kit.rwd').
+
+    snprintf(out_, outSize_, "%s/%s/%s", kKitFolder, kitName_, kKitSettingsFile);
+}
+
+int16_t Controller::sd_findInstIndex(const char* instName_) {
+    /// @brief Returns the instrument library index of the given entry name, or -1 if absent.
+
+    int16_t index = -1;
+    char searchName[kFileNameSize + 1];
+
+    f_close(&sd.file);
+    if ((f_open(&sd.file, "System/Data/Inst.lib", FA_READ) == FR_OK) && (f_lseek(&sd.file, 25) == FR_OK)) {
+        for (uint16_t i = 0; i < instLibrarySize; i++) {
+            memset(searchName, 0x00, sizeof(searchName));
+            if ((f_read(&sd.file, searchName, kFileNameSize, &sd.bytesread) != FR_OK) || (sd.bytesread < kFileNameSize)) break;
+            if (strcmp(instName_, searchName) == 0) {
+                index = i;
+                break;
             }
+        }
+    }
+    f_close(&sd.file);
+    return index;
+}
+
+static int8_t kitLayerFromSampleName(const char* name_) {
+    /// @brief Parses the leading layer number of a kit sample name ("01-Kick.wav" -> layer 0).
+    /// Returns -1 when the name does not start with a number in the range 1..kLayerLibrarySize.
+
+    uint16_t value = 0;
+    uint8_t digits = 0;
+    while ((name_[digits] >= '0') && (name_[digits] <= '9') && (digits < 3)) {
+        value = (value * 10) + (name_[digits] - '0');
+        digits += 1;
+    }
+    if ((digits == 0) || (name_[digits] >= '0' && name_[digits] <= '9')) return -1;
+    if ((value < 1) || (value > kLayerLibrarySize)) return -1;
+    return (int8_t)(value - 1);
+}
+
+void Controller::sd_encodeDrumkitData(uint8_t* data_) {
+    /// @brief Serializes current drumkit state into a kDrumkitByteSize payload buffer.
+    /// Encodes processor parameters, layer settings and per-layer asset references.
+
+    memset(data_, 0x00, kDrumkitByteSize);
+
+    // 1. SLOT MARKER
+    // Mark file as an active drumkit.
+    data_[0] = '*';
+
+    // 2. MIXER SETTINGS
+    data_[1] = mixer.masterVolume;
+    data_[2] = mixer.hpVolume;
+    data_[3] = mixer.loVolume;
+    data_[4] = mixer.liVolume;
+    data_[5] = mixer.liMixerIn;
+    data_[6] = mixer.pan;
+    data_[7] = mixer.limiter;
+    data_[8] = mixer.normalize;
+    data_[9] = mixer.masterMute;
+    data_[10] = mixer.hpMute;
+    data_[11] = mixer.loMute;
+    data_[12] = mixer.liMute;
+
+    // 3. RHYTHM SETTINGS
+    data_[13] = rhythm.tempo;
+    data_[14] = rhythm.measure;
+    data_[15] = rhythm.bar;
+    data_[16] = rhythm.quantize;
+
+    // 4. METRONOME SETTINGS
+    data_[17] = metronome.active;
+    data_[18] = metronome.precount;
+    data_[19] = metronome.sample;
+    data_[20] = metronome.volume;
+
+    // 5. I/O SYNC SETTINGS
+    data_[21] = io.syncIn;
+    data_[22] = io.syncOut;
+    data_[23] = (uint8_t)((io.midiIn << 4) | io.midiInChannel);
+    data_[24] = (uint8_t)((io.midiOut << 4) | io.midiOutChannel);
+
+    // 6. EQUALIZER SETTINGS
+    data_[25] = eq.active;
+    data_[26] = eq.q;
+    data_[27] = eq.freqLowShelf;
+    data_[28] = eq.gainLowShelf;
+    data_[29] = eq.freqHighShelf;
+    data_[30] = eq.gainHighShelf;
+    data_[31] = eq.freqPeak[0];
+    data_[32] = eq.freqPeak[1];
+    data_[33] = eq.freqPeak[2];
+    data_[34] = eq.freqPeak[3];
+    data_[35] = eq.gainPeak[0];
+    data_[36] = eq.gainPeak[1];
+    data_[37] = eq.gainPeak[2];
+    data_[38] = eq.gainPeak[3];
+
+    // 7. FILTER SETTINGS (0 AND 1)
+    for (uint8_t i = 0; i < 2; i++) {
+        uint16_t offset = 39 + (i * 8);
+        data_[offset + 0] = filter[i].active;
+        data_[offset + 1] = filter[i].type;
+        data_[offset + 2] = filter[i].frequency;
+        data_[offset + 3] = filter[i].resonance;
+        data_[offset + 4] = filter[i].slope;
+        data_[offset + 5] = filter[i].drive;
+        data_[offset + 6] = filter[i].dry;
+        data_[offset + 7] = filter[i].wet;
+    }
+
+    // 8. EFFECT SETTINGS (A/B + SUBEFFECTS)
+    data_[55] = effect[0].active;
+    data_[56] = effect[0].type;
+    data_[57] = effect[1].active;
+    data_[58] = effect[1].type;
+    for (uint8_t i = 0; i < kEffectLibrarySize; i++) {
+        for (uint8_t j = 0; j < kSubEffectLibrarySize; j++) {
+            uint16_t baseNum = 59 + (54 * i) + (6 * j);
+            data_[baseNum + 0] = effect[i].subEffect[j].aData;
+            data_[baseNum + 1] = effect[i].subEffect[j].bData;
+            data_[baseNum + 2] = effect[i].subEffect[j].cData;
+            data_[baseNum + 3] = effect[i].subEffect[j].dData;
+            data_[baseNum + 4] = effect[i].subEffect[j].eData;
+            data_[baseNum + 5] = effect[i].subEffect[j].fData;
+        }
+    }
+
+    // 9. REVERB SETTINGS
+    data_[167] = reverb.active;
+    data_[168] = reverb.size;
+    data_[169] = reverb.decay;
+    data_[170] = reverb.damping;
+    data_[171] = reverb.preDelay;
+    data_[172] = reverb.surround;
+    data_[173] = reverb.dry;
+    data_[174] = reverb.wet;
+
+    // 10. LFO SETTINGS
+    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
+        Lfo& lfo = lfoLibrary[i];
+        uint16_t offset = 180 + (i * 6);
+        data_[offset + 0] = lfo.active;
+        data_[offset + 1] = lfo.type;
+        data_[offset + 2] = lfo.rate;
+        data_[offset + 3] = lfo.phase;
+        data_[offset + 4] = lfo.invert;
+        data_[offset + 5] = lfo.depth;
+    }
+
+    // 11. LAYER SETTINGS
+    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
+        Layer& layer = layerLibrary[i];
+        uint16_t offset = 240 + (i * 25);
+        data_[offset + 0] = layer.level;
+        data_[offset + 1] = layer.pitch;
+        data_[offset + 2] = layer.direction;
+        data_[offset + 3] = layer.resolution;
+        data_[offset + 4] = layer.start;
+        data_[offset + 5] = layer.end;
+        data_[offset + 6] = layer.timing;
+        data_[offset + 7] = layer.probability;
+        data_[offset + 8] = layer.lfoLevel;
+        data_[offset + 9] = layer.lfoPitch;
+        data_[offset + 10] = layer.lfoDirection;
+        data_[offset + 11] = layer.lfoResolution;
+        data_[offset + 12] = layer.lfoStart;
+        data_[offset + 13] = layer.lfoEnd;
+        data_[offset + 14] = layer.lfoTiming;
+        data_[offset + 15] = layer.lfoProbability;
+        data_[offset + 16] = layer.eq;
+        data_[offset + 17] = layer.filter;
+        data_[offset + 18] = layer.effect;
+        data_[offset + 19] = layer.reverb;
+        data_[offset + 20] = layer.mute;
+        data_[offset + 21] = layer.fill;
+        data_[offset + 22] = layer.style;
+    }
+
+    // 12. ASSET REFERENCES
+    // Informational only for folder kits: samples are always taken from the kit folder on load.
+    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
+        Layer& layer = layerLibrary[i];
+        uint16_t offset = 500 + (i * 100);
+        if (layer.instLoaded != -1) {
+            data_[offset] = 'x';
+            for (uint8_t j = 0; j < kFileNameSize; j++) {
+                data_[offset + 1 + j] = layer.instLoadedData.nameLong[j];
+            }
+        } else {
+            data_[offset] = 'o';
+        }
+        if (layer.sampleLoaded != -1) {
+            data_[offset + 50] = 'x';
+            for (uint8_t j = 0; j < kFileNameSize; j++) {
+                data_[offset + 50 + 1 + j] = layer.sampleLoadedData.nameLong[j];
+            }
+        } else {
+            data_[offset + 50] = 'o';
+        }
+    }
+}
+
+void Controller::sd_decodeDrumkitData(const char* data_) {
+    /// @brief Applies processor and layer parameters from a drumkit payload buffer.
+    /// Mixer/rhythm/metronome/IO bytes are stored but intentionally not applied (global settings).
+
+    // 1. EQUALIZER SETTINGS
+    eq_setActive((bool)data_[25]);
+    eq_setQ(data_[26]);
+    eq_setFreqLowShelf(data_[27]);
+    eq_setGainLowShelf(data_[28]);
+    eq_setFreqHighShelf(data_[29]);
+    eq_setGainHighShelf(data_[30]);
+    for (uint8_t i = 0; i < 4; i++) {
+        eq_setFreqPeak(i, data_[31 + i]);
+        eq_setGainPeak(i, data_[35 + i]);
+    }
+
+    // 2. FILTER SETTINGS (0 AND 1)
+    for (uint8_t i = 0; i < 2; i++) {
+        uint16_t offset = 39 + (i * 8);
+        filter_setActive(i, (bool)data_[offset + 0]);
+        filter_setType(i, data_[offset + 1]);
+        filter_setFrequency(i, data_[offset + 2]);
+        filter_setResonance(i, data_[offset + 3]);
+        filter_setSlope(i, data_[offset + 4]);
+        filter_setDrive(i, data_[offset + 5]);
+        filter_setDry(i, data_[offset + 6]);
+        filter_setWet(i, data_[offset + 7]);
+    }
+
+    // 3. EFFECT SETTINGS (A/B + SUBEFFECTS)
+    effect_setActive(0, (bool)data_[55]);
+    effect_setType(0, data_[56]);
+    effect_setActive(1, (bool)data_[57]);
+    effect_setType(1, data_[58]);
+    for (uint8_t i = 0; i < kEffectLibrarySize; i++) {
+        for (uint8_t j = 0; j < kSubEffectLibrarySize; j++) {
+            uint16_t baseNum = 59 + (54 * i) + (6 * j);
+            effect_setAData(i, j, data_[baseNum + 0]);
+            effect_setBData(i, j, data_[baseNum + 1]);
+            effect_setCData(i, j, data_[baseNum + 2]);
+            effect_setDData(i, j, data_[baseNum + 3]);
+            effect_setEData(i, j, data_[baseNum + 4]);
+            effect_setFData(i, j, data_[baseNum + 5]);
+        }
+    }
+
+    // 4. REVERB SETTINGS
+    reverb_setActive(data_[167]);
+    reverb_setSize(data_[168]);
+    reverb_setDecay(data_[169]);
+    reverb_setDamping(data_[170]);
+    reverb_setPreDelay(data_[171]);
+    reverb_setSurround(data_[172]);
+    reverb_setDry(data_[173]);
+    reverb_setWet(data_[174]);
+
+    // 5. LFO SETTINGS
+    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
+        uint16_t offset = 180 + (i * 6);
+        lfo_setActive(i, (bool)data_[offset + 0]);
+        lfo_setType(i, data_[offset + 1]);
+        lfo_setRate(i, data_[offset + 2]);
+        lfo_setPhase(i, data_[offset + 3]);
+        lfo_setInvert(i, data_[offset + 4]);
+        lfo_setDepth(i, data_[offset + 5]);
+    }
+
+    // 6. LAYER SETTINGS
+    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
+        uint16_t offset = 240 + (i * 25);
+        layerInst_setLevel(i, data_[offset + 0]);
+        layerInst_setPitch(i, data_[offset + 1]);
+        layerInst_setDirection(i, data_[offset + 2]);
+        layerInst_setResolution(i, data_[offset + 3]);
+        layerInst_setStart(i, data_[offset + 4]);
+        layerInst_setEnd(i, data_[offset + 5]);
+        layerInst_setTiming(i, data_[offset + 6]);
+        layerInst_setProbability(i, data_[offset + 7]);
+        layerInst_setLfoLevel(i, data_[offset + 8]);
+        layerInst_setLfoPitch(i, data_[offset + 9]);
+        layerInst_setLfoDirection(i, data_[offset + 10]);
+        layerInst_setLfoResolution(i, data_[offset + 11]);
+        layerInst_setLfoStart(i, data_[offset + 12]);
+        layerInst_setLfoEnd(i, data_[offset + 13]);
+        layerInst_setLfoTiming(i, data_[offset + 14]);
+        layerInst_setLfoProbability(i, data_[offset + 15]);
+        layerInst_setEq(i, data_[offset + 16]);
+        layerInst_setFilter(i, data_[offset + 17]);
+        layerInst_setEffect(i, data_[offset + 18]);
+        layerInst_setReverb(i, data_[offset + 19]);
+        layerInst_setMute(i, (bool)data_[offset + 20]);
+        layerInst_setFill(i, (bool)data_[offset + 21]);
+        layerInst_setStyle(i, (bool)data_[offset + 22]);
+    }
+}
+
+SdResult Controller::sd_checkDrumkit(uint8_t kitNum_) {
+    /// @brief Resolves the kit folder at the given index and evaluates its settings file.
+    /// FILE_MISSING      : no kit folder at this index
+    /// FILE_INACTIVE     : kit folder exists, no saved settings (samples only)
+    /// FILE_ACTIVE       : kit folder exists with valid Kit.rwd settings
+    /// FILE_INCOMPATIBLE : Kit.rwd exists but header is unrecognized
+
+    char refRead[sizeof(kDrumkitRef)] = {};
+    char data = 0;
+    char settingsPath[96];
+
+    drumkitStatus = FILE_MISSING;
+    memset(drumkitSelectedName, 0x00, sizeof(drumkitSelectedName));
+
+    // 1. KIT RESOLUTION
+    // Out-of-range index (or empty Kits folder) -> missing.
+    if (kitNum_ >= drumkitLibrarySize) return SD_OK;
+    strncpy(drumkitSelectedName, drumkitLibrary[kitNum_], kFileNameSize - 1);
+
+    // 2. SETTINGS FILE CHECK
+    // Kit exists; settings file is optional.
+    drumkitStatus = FILE_INACTIVE;
+    sd_buildKitSettingsPath(drumkitSelectedName, settingsPath, sizeof(settingsPath));
+    f_close(&sd.file);
+    if (f_open(&sd.file, settingsPath, FA_READ) == FR_OK) {
+        if ((f_read(&sd.file, refRead, strlen(kDrumkitRef), &sd.bytesread) == FR_OK) && (strncmp(kDrumkitRef, refRead, strlen(kDrumkitRef)) == 0)) {
+            f_read(&sd.file, &data, 1, &sd.bytesread);
+            drumkitStatus = (data == '*') ? FILE_ACTIVE : FILE_INACTIVE;
         } else {
             drumkitStatus = FILE_INCOMPATIBLE;
         }
-    } else {
-        // 6. ERROR STATE ASSIGNMENT
-        drumkitStatus = FILE_MISSING;
     }
-
-    // 7. RESOURCE CLEANUP
-    // Always close the file handle to free up FatFS resources for the next operation.
     f_close(&sd.file);
-    result = SD_OK;
-    return result;
+    return SD_OK;
+}
+
+void Controller::drumkit_resetAll() {
+    /// @brief Resets all layers, LFOs and DSP modules to factory defaults (unloads all samples).
+
+    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
+        layerInst_reset(i);
+    }
+    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
+        lfo_reset(i);
+    }
+    eq_reset();
+    filter_reset(0);
+    filter_reset(1);
+    effect_reset(0);
+    effect_reset(1);
+    reverb_reset();
 }
 
 SdResult Controller::sd_loadDrumkit(uint8_t kitNum_) {
-    /// @brief Loads a drumkit file and reconstructs runtime state.
-    /// Decodes processor/layer parameters and validates referenced assets.
+    /// @brief Loads a folder kit: resets everything to defaults, applies optional Kit.rwd settings,
+    /// then loads 'NN-*.wav' from the kit folder into layer NN (01..10).
+    /// Returns SD_OK, SD_ERROR (kit not found/indexed) or SD_ERROR_DETECT (some samples failed).
 
     SdResult result = SD_ERROR;
-    char drumkitName[50];
-    char drumkitNum[4];
 
-    // 1. FILENAME CONSTRUCTION
-    // Generate the 3-digit padded filename (e.g., Drumkit_001.rws).
-    sprintf(drumkitNum, "%03d", (kitNum_ + 1));
-    strcpy(drumkitName, kDrumkitStart);
-    strcat(drumkitName, drumkitNum);
-    strcat(drumkitName, kDrumkitEnd);
-
-    // 2. INPUT PROTECTION
-    // Disable keyboard interrupts to avoid bus contention during SD file I/O.
+    // 1. INPUT PROTECTION + SD STATE RECOVERY
     keyboard_disable();
-
-    // 3. SD STATE RECOVERY
-    // Ensure stale file handles are closed and abort unfinished SD transactions.
     f_close(&sd.file);
     if (HAL_SD_GetState(&hsd2) != HAL_SD_STATE_READY) {
         HAL_SD_Abort(&hsd2);
     }
 
-    // 4. FILE ELIGIBILITY CHECK
-    // Load only if file exists and is marked as an active drumkit slot.
-    if ((sd_checkDrumkit(kitNum_) == SD_OK) && (drumkitStatus == FILE_ACTIVE)) {
-        char data[kDrumkitByteSize] = {0x00};
-        if (f_open(&sd.file, drumkitName, FA_READ) == FR_OK) {
-            if (f_lseek(&sd.file, strlen(kDrumkitRef)) == FR_OK) {
+    // 2. KIT VALIDATION
+    if ((sd_checkDrumkit(kitNum_) == SD_OK) && (drumkitStatus != FILE_MISSING)) {
+        char kitName[kFileNameSize];
+        strncpy(kitName, drumkitSelectedName, sizeof(kitName));
+        bool hasSettings = (drumkitStatus == FILE_ACTIVE);
+
+        // 3. RESET TO DEFAULTS
+        // Loading a kit always starts from a clean state.
+        drumkit_resetAll();
+
+        // 4. OPTIONAL SETTINGS (Kit.rwd)
+        if (hasSettings) {
+            char settingsPath[96];
+            char data[kDrumkitByteSize] = {0x00};
+            sd_buildKitSettingsPath(kitName, settingsPath, sizeof(settingsPath));
+            if ((f_open(&sd.file, settingsPath, FA_READ) == FR_OK) && (f_lseek(&sd.file, strlen(kDrumkitRef)) == FR_OK)) {
                 const uint16_t readByteSize = 512;
-                const uint16_t drumkitByteSize = kDrumkitByteSize;
-                uint16_t readCountTotal = (drumkitByteSize / readByteSize);
-                uint16_t remainderByteSize = (drumkitByteSize % readByteSize);
-                uint8_t dataRead[readByteSize] = {0};
+                uint8_t dataRead[readByteSize];
                 uint32_t pointerOffset = 0;
                 uint32_t errorCount = 0;
 
-                // 5. DRUMKIT DATA READ
-                // Read and decode drumkit payload from storage.
-
-                // 5.1 BLOCK READ
-                // Read fixed-size 512-byte chunks for efficient SD throughput.
-                for (uint16_t i = 0; i < readCountTotal; i++) {
-                    if (f_read(&sd.file, &dataRead, readByteSize, &sd.bytesread) != FR_OK) errorCount += 1;
-                    for (uint16_t j = 0; j < readByteSize; j++) {
-                        volatile uint8_t* writePtr = (volatile uint8_t*)(data + pointerOffset);
-                        *writePtr = dataRead[j];
-                        pointerOffset += 1;
+                // Read in 512-byte chunks (plus tail) for efficient SD throughput.
+                while (pointerOffset < kDrumkitByteSize) {
+                    uint16_t chunk = ((kDrumkitByteSize - pointerOffset) > readByteSize) ? readByteSize : (kDrumkitByteSize - pointerOffset);
+                    if ((f_read(&sd.file, dataRead, chunk, &sd.bytesread) != FR_OK) || (sd.bytesread != chunk)) {
+                        errorCount += 1;
+                        break;
                     }
-                    memset(dataRead, 0x00, readByteSize);
-                }
-
-                // 5.2 TAIL READ
-                // Read the final partial block when payload is not aligned to 512 bytes.
-                if (remainderByteSize) {
-                    if (f_read(&sd.file, &dataRead, remainderByteSize, &sd.bytesread) != FR_OK) errorCount += 1;
-                    for (uint16_t k = 0; k < remainderByteSize; k++) {
-                        volatile uint8_t* writePtr = (volatile uint8_t*)(data + pointerOffset);
-                        *writePtr = dataRead[k];
-                        pointerOffset += 1;
-                    }
+                    memcpy(data + pointerOffset, dataRead, chunk);
+                    pointerOffset += chunk;
                 }
                 f_close(&sd.file);
-                if (errorCount == 0) {
-                    // 5.3 PARAMETER DECODE
-                    // Decode and apply mixer/rhythm/FX/layer parameters from the buffer.
+                if (errorCount == 0) sd_decodeDrumkitData(data);
+            }
+            f_close(&sd.file);
+        }
 
-                    // Mixer configuration
+        // 5. KIT SAMPLE MAPPING
+        // Kit folders are indexed in the instrument library as '>Name'.
+        char instName[kFileNameSize + 1];
+        snprintf(instName, sizeof(instName), "%c%s", kKitInstPrefix, kitName);
+        int16_t instNum = sd_findInstIndex(instName);
 
-                    // Rhythm configuration
+        if (instNum >= 0) {
+            int16_t layerSample[kLayerLibrarySize];
+            for (uint8_t i = 0; i < kLayerLibrarySize; i++) layerSample[i] = -1;
 
-                    // Metronome settings
-
-                    // IO settings
-
-                    // Equalizer settings
-                    eq_setActive((bool)data[25]);
-                    eq_setQ(data[26]);
-                    eq_setFreqLowShelf(data[27]);
-                    eq_setGainLowShelf(data[28]);
-                    eq_setFreqHighShelf(data[29]);
-                    eq_setGainHighShelf(data[30]);
-                    eq_setFreqPeak(0, data[31]);
-                    eq_setFreqPeak(1, data[32]);
-                    eq_setFreqPeak(2, data[33]);
-                    eq_setFreqPeak(3, data[34]);
-                    eq_setGainPeak(0, data[35]);
-                    eq_setGainPeak(1, data[36]);
-                    eq_setGainPeak(2, data[37]);
-                    eq_setGainPeak(3, data[38]);
-
-                    // Filter configuration (0 and 1)
-                    filter_setActive(0, (bool)data[39]);
-                    filter_setType(0, data[40]);
-                    filter_setFrequency(0, data[41]);
-                    filter_setResonance(0, data[42]);
-                    filter_setSlope(0, data[43]);
-                    filter_setDrive(0, data[44]);
-                    filter_setDry(0, data[45]);
-                    filter_setWet(0, data[46]);
-
-                    filter_setActive(1, (bool)data[47]);
-                    filter_setType(1, data[48]);
-                    filter_setFrequency(1, data[49]);
-                    filter_setResonance(1, data[50]);
-                    filter_setSlope(1, data[51]);
-                    filter_setDrive(1, data[52]);
-                    filter_setDry(1, data[53]);
-                    filter_setWet(1, data[54]);
-
-                    // Effect processor settings (A/B and subeffects)
-                    effect_setActive(0, (bool)data[55]);
-                    effect_setType(0, data[56]);
-                    effect_setActive(1, (bool)data[57]);
-                    effect_setType(1, data[58]);
-                    for (uint8_t i = 0; i < kEffectLibrarySize; i++) {
-                        for (uint8_t j = 0; j < kSubEffectLibrarySize; j++) {
-                            uint16_t baseNum = 59 + (54 * i) + (6 * j);
-                            effect_setAData(i, j, data[baseNum + 0]);
-                            effect_setBData(i, j, data[baseNum + 1]);
-                            effect_setCData(i, j, data[baseNum + 2]);
-                            effect_setDData(i, j, data[baseNum + 3]);
-                            effect_setEData(i, j, data[baseNum + 4]);
-                            effect_setFData(i, j, data[baseNum + 5]);
-                        }
-                    }
-
-                    // Reverb processor parameters
-                    reverb_setActive(data[167]);
-                    reverb_setSize(data[168]);
-                    reverb_setDecay(data[169]);
-                    reverb_setDamping(data[170]);
-                    reverb_setPreDelay(data[171]);
-                    reverb_setSurround(data[172]);
-                    reverb_setDry(data[173]);
-                    reverb_setWet(data[174]);
-
-                    // LFO modulation settings
-                    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
-                        uint16_t offset = 180 + (i * 6);
-                        lfo_setActive(i, (bool)data[offset + 0]);
-                        lfo_setType(i, data[offset + 1]);
-                        lfo_setRate(i, data[offset + 2]);
-                        lfo_setPhase(i, data[offset + 3]);
-                        lfo_setInvert(i, data[offset + 4]);
-                        lfo_setDepth(i, data[offset + 5]);
-                    }
-
-                    // Layer instrument configuration
-                    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-                        uint16_t offset = 240 + (i * 25);
-                        layerInst_setLevel(i, data[offset + 0]);
-                        layerInst_setPitch(i, data[offset + 1]);
-                        layerInst_setDirection(i, data[offset + 2]);
-                        layerInst_setResolution(i, data[offset + 3]);
-                        layerInst_setStart(i, data[offset + 4]);
-                        layerInst_setEnd(i, data[offset + 5]);
-                        layerInst_setTiming(i, data[offset + 6]);
-                        layerInst_setProbability(i, data[offset + 7]);
-                        layerInst_setLfoLevel(i, data[offset + 8]);
-                        layerInst_setLfoPitch(i, data[offset + 9]);
-                        layerInst_setLfoDirection(i, data[offset + 10]);
-                        layerInst_setLfoResolution(i, data[offset + 11]);
-                        layerInst_setLfoStart(i, data[offset + 12]);
-                        layerInst_setLfoEnd(i, data[offset + 13]);
-                        layerInst_setLfoTiming(i, data[offset + 14]);
-                        layerInst_setLfoProbability(i, data[offset + 15]);
-                        layerInst_setEq(i, data[offset + 16]);
-                        layerInst_setFilter(i, data[offset + 17]);
-                        layerInst_setEffect(i, data[offset + 18]);
-                        layerInst_setReverb(i, data[offset + 19]);
-                        layerInst_setMute(i, (bool)data[offset + 20]);
-                        layerInst_setFill(i, (bool)data[offset + 21]);
-                        layerInst_setStyle(i, (bool)data[offset + 22]);
-                    }
-
-                    // 5.4 ASSET REFERENCE EXTRACTION
-                    // Extract instrument/sample names and activation markers per layer.
-                    char instName[kLayerLibrarySize][kFileNameSize + 1];
-                    uint16_t instNum[kLayerLibrarySize];
-                    bool instActive[kLayerLibrarySize];
-                    bool instMissing[kLayerLibrarySize] = {false};
-                    char sampleName[kLayerLibrarySize][kFileNameSize + 1];
-                    uint16_t sampleNum[kLayerLibrarySize];
-                    bool sampleActive[kLayerLibrarySize];
-                    bool sampleMissing[kLayerLibrarySize];
-                    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-                        Layer& layer = layerLibrary[i];
-                        uint16_t offset = 500 + (i * 100);
-                        (data[offset] == 'x') ? instActive[i] = true : instActive[i] = false;
-                        (data[offset + 50] == 'x') ? sampleActive[i] = true : sampleActive[i] = false;
-                        memcpy(instName[i], &(data[offset + 1]), kFileNameSize + 1);
-                        memcpy(sampleName[i], &(data[offset + 50 + 1]), kFileNameSize + 1);
-                    }
-
-                    // 5.5 LIBRARY CROSS-CHECK
-                    // Match extracted references against generated libraries and mark missing assets.
-                    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-                        // Instrument lookup in master index
-                        if (instActive[i]) {
-                            if ((f_open(&sd.file, "System/Data/Inst.lib", FA_READ) == FR_OK) && (f_lseek(&sd.file, 25) == FR_OK)) {
-                                char searchName[kFileNameSize + 1];
-                                bool searchActive = true;
-                                uint16_t searchCounter = 0;
-                                while (searchActive) {
-                                    memset(searchName, 0x00, sizeof(searchName));
-                                    f_read(&sd.file, searchName, kFileNameSize, &sd.bytesread);
-                                    if (strcmp(instName[i], searchName) == 0) {
-                                        instNum[i] = searchCounter;
-                                        instMissing[i] = false;
-                                        searchActive = false;
-                                    } else if (searchCounter >= instLibrarySize) {
-                                        instNum[i] = -1;
-                                        instMissing[i] = true;
-                                        searchActive = false;
-                                    }
-                                    searchCounter += 1;
-                                }
-                            } else {
-                                instMissing[i] = true;
-                            }
-                            f_close(&sd.file);
-                        } else {
-                            instNum[i] = -1;
-                            instMissing[i] = false;
-                        }
-
-                        // Apply instrument selection state to layer
-                        if (instMissing[i]) {
-                            layerInst_setInstSelected(i, -1);
-                            layerInst_setInstLoaded(i);
-                            layerInst_setSampleSelected(i, -1);
-                            layerInst_setSampleLoaded(i);
-                        } else {
-                            layerInst_setInstSelected(i, instNum[i]);
-                            layerInst_setInstLoaded(i);
-                        }
-
-                        // Sample lookup in per-instrument index
-                        if ((sampleActive[i]) && (instActive[i]) && (!instMissing[i])) {
-                            char instFileName[kFileNameSize + 15] = "System/Data/";
-                            strncat(instFileName, instName[i], kFileNameSize);
-                            strncat(instFileName, ".ins", 4);
-                            if ((f_open(&sd.file, instFileName, FA_READ) == FR_OK) && (f_lseek(&sd.file, 25) == FR_OK)) {
-                                char searchName[kFileNameSize + 1];
-                                bool searchActive = true;
-                                uint16_t searchCounter = 0;
-                                while (searchActive) {
-                                    memset(searchName, 0x00, kFileNameSize);
-                                    f_read(&sd.file, searchName, kFileNameSize, &sd.bytesread);
-                                    if (strcmp(sampleName[i], searchName) == 0) {
-                                        sampleNum[i] = searchCounter;
-                                        sampleMissing[i] = false;
-                                        searchActive = false;
-                                    } else if (searchCounter >= sampleLibrarySize[instNum[i]]) {
-                                        sampleNum[i] = -1;
-                                        sampleMissing[i] = true;
-                                        searchActive = false;
-                                    }
-                                    searchCounter += 1;
-                                }
-                            } else {
-                                sampleMissing[i] = true;
-                            }
-                            f_close(&sd.file);
-                        } else {
-                            sampleNum[i] = -1;
-                            sampleMissing[i] = false;
-                        }
-
-                        // Apply sample selection state to layer
-                        if (sampleMissing[i]) {
-                            layerInst_setInstSelected(i, -1);
-                            layerInst_setInstLoaded(i);
-                            layerInst_setSampleSelected(i, -1);
-                            layerInst_setSampleLoaded(i);
-                        } else {
-                            layerInst_setSampleSelected(i, sampleNum[i]);
-                            layerInst_setSampleLoaded(i);
-                        }
-                    }
-
-                    // 5.6 POST-LOAD VALIDATION
-                    // Raise alert if any instrument/sample reference cannot be resolved.
-                    uint8_t missingSample = 0;
-                    for (uint8_t j = 0; j < kLayerLibrarySize; j++) {
-                        if (instMissing[j]) missingSample += 1;
-                        if (sampleMissing[j]) missingSample += 1;
-                    }
-                    if (missingSample) {
-                        (missingSample == 1) ? alertType = ALERT_MISSINGSAMPLE : alertType = ALERT_MISSINGSAMPLES;
-                        lcd_drawAlert();
-                        HAL_Delay(1000);
-                        result = SD_ERROR;
-                    } else {
-                        result = SD_OK;
-                    }
+            // 5.1 SCAN KIT SAMPLE INDEX
+            // Read the whole (sorted) sample list first: the layer setters below reuse sd.file.
+            char indexPath[96];
+            char sampleName[kFileNameSize + 1];
+            sd_buildInstIndexPath(instName, indexPath, sizeof(indexPath));
+            if ((f_open(&sd.file, indexPath, FA_READ) == FR_OK) && (f_lseek(&sd.file, 25) == FR_OK)) {
+                for (uint16_t j = 0; j < sampleLibrarySize[instNum]; j++) {
+                    memset(sampleName, 0x00, sizeof(sampleName));
+                    if ((f_read(&sd.file, sampleName, kFileNameSize, &sd.bytesread) != FR_OK) || (sd.bytesread < kFileNameSize)) break;
+                    int8_t layerNum = kitLayerFromSampleName(sampleName);
+                    // First match (alphabetical) wins if a number is duplicated.
+                    if ((layerNum >= 0) && (layerSample[layerNum] == -1)) layerSample[layerNum] = j;
                 }
             }
+            f_close(&sd.file);
+
+            // 5.2 LOAD SAMPLES INTO LAYERS
+            uint8_t failedCount = 0;
+            for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
+                if (layerSample[i] == -1) continue;
+                layerInst_setInstSelected(i, instNum);
+                layerInst_setInstLoaded(i);
+                layerInst_setSampleSelected(i, layerSample[i]);
+                Layer& layer = layerLibrary[i];
+                if (layer.sampleSelectedReadError || layer.sampleSelectedTypeError) {
+                    failedCount += 1;
+                    layerInst_setInstSelected(i, -1);
+                    layerInst_setInstLoaded(i);
+                    layerInst_setSampleSelected(i, -1);
+                }
+                layerInst_setSampleLoaded(i);
+            }
+            result = (failedCount == 0) ? SD_OK : SD_ERROR_DETECT;
         }
-        f_close(&sd.file);
     }
 
     // 6. INPUT RESTORATION
-    // Re-enable keyboard interrupts before returning to caller.
     keyboard_enable();
     return result;
 }
 
 SdResult Controller::sd_saveDrumkit(uint8_t kitNum_) {
-    /// @brief Serializes current drumkit state and writes it to the selected SD slot.
-    /// Encodes processor parameters, layer settings, asset references, and final EOF marker.
+    /// @brief Saves current settings to 'Kits/<Name>/Kit.rwd' for the selected kit folder.
+    /// Samples are not copied; the kit folder's WAV files remain the source of truth.
 
     SdResult result = SD_ERROR;
-    char eof[] = "EOF";
-    char drumkitName[50];
-    char drumkitNum[4];
+    const char eof[] = "EOF";
+    uint8_t data[kDrumkitByteSize];
+    char settingsPath[96];
 
-    // 1. FILENAME CONSTRUCTION
-    // Generate the 3-digit padded filename (e.g., Drumkit_001.rws).
-    sprintf(drumkitNum, "%03d", (kitNum_ + 1));
-    strcpy(drumkitName, kDrumkitStart);
-    strcat(drumkitName, drumkitNum);
-    strcat(drumkitName, kDrumkitEnd);
+    // 1. KIT VALIDATION
+    if ((sd_checkDrumkit(kitNum_) != SD_OK) || (drumkitStatus == FILE_MISSING)) return result;
+    sd_buildKitSettingsPath(drumkitSelectedName, settingsPath, sizeof(settingsPath));
 
     // 2. PAYLOAD ENCODING
-    // Build the drumkit payload buffer before starting SD write operations.
+    sd_encodeDrumkitData(data);
 
-    // 2.1 SLOT MARKER
-    // Mark file as active drumkit slot.
-    uint8_t data[kDrumkitByteSize] = {0x00};
-    data[0] = '*';
-
-    // 2.2 MIXER SETTINGS
-    data[1] = mixer.masterVolume;
-    data[2] = mixer.hpVolume;
-    data[3] = mixer.loVolume;
-    data[4] = mixer.liVolume;
-    data[5] = mixer.liMixerIn;
-    data[6] = mixer.pan;
-    data[7] = mixer.limiter;
-    data[8] = mixer.normalize;
-    data[9] = mixer.masterMute;
-    data[10] = mixer.hpMute;
-    data[11] = mixer.loMute;
-    data[12] = mixer.liMute;
-
-    // 2.3 RHYTHM SETTINGS
-    data[13] = rhythm.tempo;
-    data[14] = rhythm.measure;
-    data[15] = rhythm.bar;
-    data[16] = rhythm.quantize;
-
-    // 2.4 METRONOME SETTINGS
-    data[17] = metronome.active;
-    data[18] = metronome.precount;
-    data[19] = metronome.sample;
-    data[20] = metronome.volume;
-
-    // 2.5 I/O SYNC SETTINGS
-    data[21] = io.syncIn;
-    data[22] = io.syncOut;
-    data[23] = (uint8_t)((io.midiIn << 4) | io.midiInChannel);
-    data[24] = (uint8_t)((io.midiOut << 4) | io.midiOutChannel);
-
-    // 2.6 EQUALIZER SETTINGS
-    data[25] = eq.active;
-    data[26] = eq.q;
-    data[27] = eq.freqLowShelf;
-    data[28] = eq.gainLowShelf;
-    data[29] = eq.freqHighShelf;
-    data[30] = eq.gainHighShelf;
-    data[31] = eq.freqPeak[0];
-    data[32] = eq.freqPeak[1];
-    data[33] = eq.freqPeak[2];
-    data[34] = eq.freqPeak[3];
-    data[35] = eq.gainPeak[0];
-    data[36] = eq.gainPeak[1];
-    data[37] = eq.gainPeak[2];
-    data[38] = eq.gainPeak[3];
-
-    // 2.7 FILTER SETTINGS (0 AND 1)
-    data[39] = filter[0].active;
-    data[40] = filter[0].type;
-    data[41] = filter[0].frequency;
-    data[42] = filter[0].resonance;
-    data[43] = filter[0].slope;
-    data[44] = filter[0].drive;
-    data[45] = filter[0].dry;
-    data[46] = filter[0].wet;
-
-    data[47] = filter[1].active;
-    data[48] = filter[1].type;
-    data[49] = filter[1].frequency;
-    data[50] = filter[1].resonance;
-    data[51] = filter[1].slope;
-    data[52] = filter[1].drive;
-    data[53] = filter[1].dry;
-    data[54] = filter[1].wet;
-
-    // 2.8 EFFECT SETTINGS (A/B + SUBEFFECTS)
-    data[55] = effect[0].active;
-    data[56] = effect[0].type;
-    data[57] = effect[1].active;
-    data[58] = effect[1].type;
-    for (uint8_t i = 0; i < kEffectLibrarySize; i++) {
-        for (uint8_t j = 0; j < kSubEffectLibrarySize; j++) {
-            uint16_t baseNum = 59 + (54 * i) + (6 * j);
-            data[baseNum + 0] = effect[i].subEffect[j].aData;
-            data[baseNum + 1] = effect[i].subEffect[j].bData;
-            data[baseNum + 2] = effect[i].subEffect[j].cData;
-            data[baseNum + 3] = effect[i].subEffect[j].dData;
-            data[baseNum + 4] = effect[i].subEffect[j].eData;
-            data[baseNum + 5] = effect[i].subEffect[j].fData;
-        }
-    }
-
-    // 2.9 REVERB SETTINGS
-    data[167] = reverb.active;
-    data[168] = reverb.size;
-    data[169] = reverb.decay;
-    data[170] = reverb.damping;
-    data[171] = reverb.preDelay;
-    data[172] = reverb.surround;
-    data[173] = reverb.dry;
-    data[174] = reverb.wet;
-
-    // 2.10 LFO SETTINGS
-    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
-        Lfo& lfo = lfoLibrary[i];
-        uint16_t offset = 180 + (i * 6);
-        data[offset + 0] = lfo.active;
-        data[offset + 1] = lfo.type;
-        data[offset + 2] = lfo.rate;
-        data[offset + 3] = lfo.phase;
-        data[offset + 4] = lfo.invert;
-        data[offset + 5] = lfo.depth;
-    }
-
-    // 2.11 LAYER SETTINGS
-    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-        Layer& layer = layerLibrary[i];
-        uint16_t offset = 240 + (i * 25);
-        data[offset + 0] = layer.level;
-        data[offset + 1] = layer.pitch;
-        data[offset + 2] = layer.direction;
-        data[offset + 3] = layer.resolution;
-        data[offset + 4] = layer.start;
-        data[offset + 5] = layer.end;
-        data[offset + 6] = layer.timing;
-        data[offset + 7] = layer.probability;
-        data[offset + 8] = layer.lfoLevel;
-        data[offset + 9] = layer.lfoPitch;
-        data[offset + 10] = layer.lfoDirection;
-        data[offset + 11] = layer.lfoResolution;
-        data[offset + 12] = layer.lfoStart;
-        data[offset + 13] = layer.lfoEnd;
-        data[offset + 14] = layer.lfoTiming;
-        data[offset + 15] = layer.lfoProbability;
-        data[offset + 16] = layer.eq;
-        data[offset + 17] = layer.filter;
-        data[offset + 18] = layer.effect;
-        data[offset + 19] = layer.reverb;
-        data[offset + 20] = layer.mute;
-        data[offset + 21] = layer.fill;
-        data[offset + 22] = layer.style;
-    }
-
-    // 2.12 ASSET REFERENCES
-    // Store per-layer instrument/sample activity flags and names.
-    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-        Layer& layer = layerLibrary[i];
-        uint16_t offset = 500 + (i * 100);
-        if (layer.instLoaded != -1) {
-            data[offset] = 'x';
-            for (uint8_t j = 0; j < kFileNameSize; j++) {
-                data[offset + 1 + j] = layer.instLoadedData.nameLong[j];
-            }
-        } else {
-            data[offset] = 'o';
-        }
-        if (layer.sampleLoaded != -1) {
-            data[offset + 50] = 'x';
-            for (uint8_t j = 0; j < kFileNameSize; j++) {
-                data[offset + 50 + 1 + j] = layer.sampleLoadedData.nameLong[j];
-            }
-        } else {
-            data[offset + 50] = 'o';
-        }
-    }
-
-    // 3. INPUT PROTECTION
-    // Disable keyboard interrupts during SD write operations.
+    // 3. INPUT PROTECTION + SD STATE RECOVERY
     keyboard_disable();
-
-    // 4. SD STATE RECOVERY
-    // Close stale handles and abort unfinished SD transactions.
     f_close(&sd.file);
     if (HAL_SD_GetState(&hsd2) != HAL_SD_STATE_READY) {
         HAL_SD_Abort(&hsd2);
     }
 
-    // 5. FILE WRITE PIPELINE
-    // Write header, drumkit block, and EOF marker.
-    if (sd_checkDrumkit(kitNum_) == SD_OK) {
-        if (f_open(&sd.file, drumkitName, FA_WRITE | FA_CREATE_ALWAYS) == FR_OK) {
-            if (f_write(&sd.file, kDrumkitRef, strlen(kDrumkitRef), &sd.byteswritten) == FR_OK) {
-                // 5.1 DRUMKIT BLOCK WRITE
-                // Stream encoded drumkit payload in 512-byte chunks.
-                const uint16_t writeByteSize = 512;
-                uint16_t writeCountTotal = (kDrumkitByteSize / writeByteSize);
-                uint16_t remainderByteSize = (kDrumkitByteSize % writeByteSize);
-                uint32_t pointerOffset = 0;
-                uint32_t errorCount = 0;
-                for (uint16_t i = 0; i < writeCountTotal; i++) {
-                    if (f_write(&sd.file, (data + pointerOffset), writeByteSize, &sd.byteswritten) != FR_OK) errorCount += 1;
-                    pointerOffset += 512;
-                }
-
-                // 5.2 DRUMKIT TAIL WRITE
-                // Write final non-512-aligned remainder.
-                if (remainderByteSize) {
-                    if (f_write(&sd.file, (data + pointerOffset), remainderByteSize, &sd.byteswritten) != FR_OK) errorCount += 1;
-                }
-
-                // 5.3 EOF COMMIT
-                // Commit EOF marker only when all previous writes succeeded.
-                if (errorCount == 0) {
-                    if (f_write(&sd.file, eof, strlen(eof), &sd.byteswritten) == FR_OK) {
-                        result = SD_OK;
-                    }
+    // 4. FILE WRITE PIPELINE
+    // Write header, payload (512-byte chunks + tail) and EOF marker.
+    if (f_open(&sd.file, settingsPath, FA_WRITE | FA_CREATE_ALWAYS) == FR_OK) {
+        if (f_write(&sd.file, kDrumkitRef, strlen(kDrumkitRef), &sd.byteswritten) == FR_OK) {
+            const uint16_t writeByteSize = 512;
+            uint32_t pointerOffset = 0;
+            uint32_t errorCount = 0;
+            while (pointerOffset < kDrumkitByteSize) {
+                uint16_t chunk = ((kDrumkitByteSize - pointerOffset) > writeByteSize) ? writeByteSize : (kDrumkitByteSize - pointerOffset);
+                if (f_write(&sd.file, (data + pointerOffset), chunk, &sd.byteswritten) != FR_OK) errorCount += 1;
+                pointerOffset += chunk;
+            }
+            if (errorCount == 0) {
+                if (f_write(&sd.file, eof, strlen(eof), &sd.byteswritten) == FR_OK) {
+                    result = SD_OK;
                 }
             }
         }
-        f_close(&sd.file);
     }
+    f_close(&sd.file);
 
-    // 6. INPUT RESTORATION
-    // Re-enable keyboard interrupts before returning to caller.
+    // 5. INPUT RESTORATION
     keyboard_enable();
     return result;
 }
 
 SdResult Controller::sd_clearDrumkit(uint8_t kitNum_) {
-    /// @brief Overwrites a drumkit preset slot with default factory parameters.
-    /// Resets all instrument settings and FX chains to a default template.
+    /// @brief Deletes the selected kit's Kit.rwd settings file (WAV samples are never touched).
 
     SdResult result = SD_ERROR;
-    char eof[] = "EOF";
-    char drumkitName[50];
-    char drumkitNum[4];
+    char settingsPath[96];
 
-    // 1. FILENAME CONSTRUCTION
-    // Build the target path (e.g., System/Drumkit/Drumkit_001.rws).
-    sprintf(drumkitNum, "%03d", (kitNum_ + 1));
-    strcpy(drumkitName, kDrumkitStart);
-    strcat(drumkitName, drumkitNum);
-    strcat(drumkitName, kDrumkitEnd);
+    if ((sd_checkDrumkit(kitNum_) != SD_OK) || (drumkitStatus == FILE_MISSING)) return result;
+    sd_buildKitSettingsPath(drumkitSelectedName, settingsPath, sizeof(settingsPath));
 
-    // 2. INPUT PROTECTION + SD STATE RECOVERY
-    // Lock keyboard input and ensure SDMMC is in a clean 'Ready' state.
     keyboard_disable();
     f_close(&sd.file);
     if (HAL_SD_GetState(&hsd2) != HAL_SD_STATE_READY) {
         HAL_SD_Abort(&hsd2);
     }
-
-    // 3. FILE RE-CREATION
-    // Re-create the target slot to wipe any previous drumkit data.
-    if (sd_checkDrumkit(kitNum_) == SD_OK) {
-        if (f_open(&sd.file, drumkitName, FA_WRITE | FA_CREATE_ALWAYS) == FR_OK) {
-            // 4. HEADER WRITE
-            // Write standard drumkit signature header.
-            if (f_write(&sd.file, kDrumkitRef, strlen(kDrumkitRef), &sd.byteswritten) == FR_OK) {
-                const uint16_t writeByteSize = 512;  // Block-aligned size for SD efficiency
-                const uint16_t drumkitByteSize = kDrumkitByteSize;
-                uint16_t writeCountTotal = (drumkitByteSize / writeByteSize);
-                uint16_t remainderByteSize = (drumkitByteSize % writeByteSize);
-                uint32_t pointerOffset = 0;
-                uint32_t errorCount = 0;
-
-                // 5. DEFAULT PAYLOAD WRITE
-                // Stream default drumkit template in fixed-size blocks.
-
-                // 5.1 DRUMKIT BLOCK WRITE
-                // Write default drumkit data in 512-byte chunks.
-                for (uint16_t i = 0; i < writeCountTotal; i++) {
-                    if (f_write(&sd.file, (kDataDrumkit + pointerOffset), writeByteSize, &sd.byteswritten) != FR_OK) errorCount += 1;
-                    pointerOffset += 512;
-                }
-
-                // 5.2 DRUMKIT TAIL WRITE
-                // Write final non-512-aligned drumkit remainder.
-                if (remainderByteSize) {
-                    if (f_write(&sd.file, (kDataDrumkit + pointerOffset), remainderByteSize, &sd.byteswritten) != FR_OK) errorCount += 1;
-                }
-
-                // 5.3 EOF COMMIT
-                // Seal the file with EOF only if all previous writes succeeded.
-                if (errorCount == 0) {
-                    if (f_write(&sd.file, eof, strlen(eof), &sd.byteswritten) == FR_OK) {
-                        result = SD_OK;
-                    }
-                }
-            }
-        }
-        f_close(&sd.file);
-    }
-
-    // 6. INPUT RESTORATION
-    // Re-enable keyboard interrupts before returning to caller.
+    FRESULT res = f_unlink(settingsPath);
+    if ((res == FR_OK) || (res == FR_NO_FILE)) result = SD_OK;
     keyboard_enable();
     return result;
 }
@@ -6876,7 +6759,7 @@ SdResult Controller::sd_checkSamplesInUse() {
     bool instMissing[kLayerLibrarySize] = {false};
     bool sampleMissing[kLayerLibrarySize] = {false};
     char buffer[kFileNameSize];
-    char pathBuffer[64];
+    char pathBuffer[96];
 
     // 1. INPUT PROTECTION
     // Lock keyboard interrupts to ensure exclusive access to the SDMMC bus.
@@ -6938,9 +6821,7 @@ SdResult Controller::sd_checkSamplesInUse() {
         if (instMissing[i] || layer.instLoaded == -1 || layer.sampleLoaded == -1) continue;
 
         // Open instrument-specific sample index (.ins)
-        strcpy(pathBuffer, "System/Data/");
-        strncat(pathBuffer, layer.instLoadedData.nameLong, kFileNameSize);
-        strcat(pathBuffer, ".ins");
+        sd_buildInstIndexPath(layer.instLoadedData.nameLong, pathBuffer, sizeof(pathBuffer));
 
         if (f_open(&sd.file, pathBuffer, FA_READ) == FR_OK) {
             const uint32_t headerOffset = 25;
@@ -9607,57 +9488,43 @@ void Controller::lcd_drawDrumkit_NewData() {
 }
 
 void Controller::lcd_drawDrumkit_LoadData() {
-    /// @brief Draws Drumkit->Load row with selected drumkit index.
-
-    // 1. STYLE SETUP
-    // Configure data text style.
-    lcd_setMenuDataState(WHITE);
-
-    // 2. TEXT BUILD AND DRAW
-    // Build DRUM_XXX label and draw when Load tab is active.
-    char* text;
-    char drum[11] = "  DRUM_";
-    char num[4];
-    sprintf(num, "%03d", drumkitMenuCounter + 1);
-    strncat(drum, num, 3);
-    (menuTab == 1) ? text = drum : text = (char*)kDataDashR;
-    lcd.drawText(text, kMenuDataTextSize, kMenuDataX[1], kMenuDataY[1]);
+    /// @brief Draws Drumkit->Load row with the selected kit name.
+    lcd_drawDrumkit_KitData(1);
 }
 
 void Controller::lcd_drawDrumkit_SaveData() {
-    /// @brief Draws Drumkit->Save row with selected drumkit index.
-
-    // 1. STYLE SETUP
-    // Configure data text style.
-    lcd_setMenuDataState(WHITE);
-
-    // 2. TEXT BUILD AND DRAW
-    // Build DRUM_XXX label and draw when Save tab is active.
-    char* text;
-    char drum[11] = "  DRUM_";
-    char num[4];
-    sprintf(num, "%03d", drumkitMenuCounter + 1);
-    strncat(drum, num, 3);
-    (menuTab == 2) ? text = drum : text = (char*)kDataDashR;
-    lcd.drawText(text, kMenuDataTextSize, kMenuDataX[2], kMenuDataY[2]);
+    /// @brief Draws Drumkit->Save row with the selected kit name.
+    lcd_drawDrumkit_KitData(2);
 }
 
 void Controller::lcd_drawDrumkit_ClearData() {
-    /// @brief Draws Drumkit->Clear row with selected drumkit index.
+    /// @brief Draws Drumkit->Clear row with the selected kit name.
+    lcd_drawDrumkit_KitData(3);
+}
+
+void Controller::lcd_drawDrumkit_KitData(uint8_t tab_) {
+    /// @brief Draws a Load/Save/Clear row: right-aligned kit name (10 chars) when tab is active.
 
     // 1. STYLE SETUP
-    // Configure data text style.
     lcd_setMenuDataState(WHITE);
 
-    // 2. TEXT BUILD AND DRAW
-    // Build DRUM_XXX label and draw when Clear tab is active.
-    char* text;
-    char drum[11] = "  DRUM_";
-    char num[4];
-    sprintf(num, "%03d", drumkitMenuCounter + 1);
-    strncat(drum, num, 3);
-    (menuTab == 3) ? text = drum : text = (char*)kDataDashR;
-    lcd.drawText(text, kMenuDataTextSize, kMenuDataX[3], kMenuDataY[3]);
+    // 2. TEXT BUILD
+    // Truncate long names with '_' (same convention as sample names); dashes when no kit.
+    char text[11];
+    uint8_t length = strlen(drumkitSelectedName);
+    if ((menuTab != tab_) || (length == 0)) {
+        strncpy(text, kDataDashR, sizeof(text));
+    } else if (length > 10) {
+        strncpy(text, drumkitSelectedName, 9);
+        text[9] = '_';
+    } else {
+        memset(text, ' ', 10 - length);
+        memcpy(text + (10 - length), drumkitSelectedName, length);
+    }
+    text[10] = 0;
+
+    // 3. DRAW
+    lcd.drawText(text, kMenuDataTextSize, kMenuDataX[tab_], kMenuDataY[tab_]);
 }
 
 /* Lcd Mixer Menu Functions --------------------------------------------------*/
@@ -12108,7 +11975,35 @@ void Controller::lcd_drawLayerTab_InstData(uint8_t layerNum_) {
     // Load layer reference for text lookup.
     Layer& layer = layerLibrary[layerNum_];
 
-    // 3. VALUE DRAW
+    // 3. KIT LAYER LABEL
+    // Every layer of a folder kit shares the same instrument (the kit folder), so show the
+    // sample name instead: "01-Kick Hard.wav" -> "Kick Hard". Left-aligned, 12 chars, '_' if truncated.
+    if ((layer.instLoadedData.nameLong[0] == kKitInstPrefix) && (layer.sampleLoaded != -1)) {
+        const char* name = layer.sampleLoadedData.nameLong;
+        while ((*name >= '0') && (*name <= '9')) name++;                   // layer number
+        while ((*name == '-') || (*name == '_') || (*name == ' ')) name++;  // separator
+        uint8_t length = strlen(name);
+        const char* dot = strrchr(name, '.');
+        if (dot != nullptr) length = dot - name;                             // extension
+        if (length == 0) {                                                   // name was only "01.wav"
+            name = layer.sampleLoadedData.nameLong;
+            length = strlen(name);
+        }
+
+        char label[13];
+        memset(label, ' ', 12);
+        if (length > 12) {
+            memcpy(label, name, 11);
+            label[11] = '_';
+        } else {
+            memcpy(label, name, length);
+        }
+        label[12] = 0;
+        lcd.drawText(label, 12, kLayerTextInstX, kLayerTextY[layerNum_]);
+        return;
+    }
+
+    // 4. VALUE DRAW
     // Draw loaded instrument short label.
     lcd.drawText(layer.instLoadedData.nameShortL, 12, kLayerTextInstX, kLayerTextY[layerNum_]);
 }
@@ -13284,9 +13179,9 @@ void Controller::drumkit_menuLeft() {
 void Controller::drumkit_menuUp() {
     /// @brief Increments drumkit slot selection with wrap-around and refreshes active tab panel.
 
-    // 1. DRUMKIT SLOT NAVIGATION
-    // Increment slot pointer and wrap after reaching last index.
-    (drumkitMenuCounter < kMaxDrumkit) ? drumkitMenuCounter += 1 : drumkitMenuCounter = kMinFile;
+    // 1. KIT NAVIGATION
+    // Increment kit pointer and wrap after reaching last kit folder.
+    (drumkitMenuCounter < ((int16_t)drumkitLibrarySize - 1)) ? drumkitMenuCounter += 1 : drumkitMenuCounter = 0;
 
     // 2. SLOT STATUS VALIDATION
     // Recompute slot state (active/inactive/empty/corrupt) for current index.
@@ -13319,9 +13214,9 @@ void Controller::drumkit_menuUp() {
 void Controller::drumkit_menuDown() {
     /// @brief Decrements drumkit slot selection with wrap-around and refreshes active tab panel.
 
-    // 1. DRUMKIT SLOT NAVIGATION
-    // Decrement slot pointer and wrap before first index.
-    (drumkitMenuCounter > kMinDrumkit) ? drumkitMenuCounter -= 1 : drumkitMenuCounter = kMaxFile;
+    // 1. KIT NAVIGATION
+    // Decrement kit pointer and wrap before first kit folder.
+    (drumkitMenuCounter > 0) ? drumkitMenuCounter -= 1 : drumkitMenuCounter = (drumkitLibrarySize > 0) ? (drumkitLibrarySize - 1) : 0;
 
     // 2. SLOT STATUS VALIDATION
     // Recompute slot state (active/inactive/empty/corrupt) for current index.
@@ -13375,34 +13270,17 @@ void Controller::drumkit_newAction() {
     // Reset song transport and playback runtime state.
     reset();
 
-    // 3. LAYER RESET
-    // Reinitialize all layer instruments to default state.
-    for (uint8_t i = 0; i < kLayerLibrarySize; i++) {
-        layerInst_reset(i);
-    }
-
-    // 4. MODULATION RESET
-    // Reset all LFO instances to default state.
-    for (uint8_t i = 0; i < kLfoLibrarySize; i++) {
-        lfo_reset(i);
-    }
-
-    // 5. GLOBAL DSP MODULE RESET
-    // Reset EQ, filters, effects, and reverb blocks.
-    eq_reset();
-    filter_reset(0);
-    filter_reset(1);
-    effect_reset(0);
-    effect_reset(1);
-    reverb_reset();
+    // 3. LAYER / LFO / DSP RESET
+    // Reinitialize layers, LFOs, EQ, filters, effects and reverb to defaults.
+    drumkit_resetAll();
 }
 
 void Controller::drumkit_loadSelect() {
-    /// @brief Opens load confirmation alert when the selected drumkit slot is active.
+    /// @brief Opens load confirmation alert when a kit folder is selected.
 
     // 1. PRECONDITION CHECK
-    // Show load confirmation only for physically active drumkit slots.
-    if (drumkitStatus == FILE_ACTIVE) {
+    // Any existing kit folder can be loaded (with or without saved Kit.rwd settings).
+    if ((drumkitStatus != FILE_MISSING) && (drumkitStatus != FILE_NONE)) {
         // 2. ALERT STATE CONFIGURATION
         // Configure alert type and enable alert rendering.
         alertFlag = true;
@@ -13466,13 +13344,16 @@ void Controller::drumkit_loadAction() {
 }
 
 void Controller::drumkit_saveSelect() {
-    /// @brief Opens save/overwrite confirmation alert based on selected drumkit slot occupancy.
+    /// @brief Opens save/overwrite confirmation alert for the selected kit's Kit.rwd settings file.
 
-    // 1. ALERT STATE CONFIGURATION
-    // Select Save or Overwrite prompt based on slot occupancy.
-    // Existing slot -> overwrite warning, empty slot -> normal save prompt.
+    // 1. PRECONDITION CHECK
+    // Settings can only be saved into an existing kit folder.
+    if ((drumkitStatus == FILE_MISSING) || (drumkitStatus == FILE_NONE)) return;
+
+    // 2. ALERT STATE CONFIGURATION
+    // Existing Kit.rwd -> overwrite warning, otherwise normal save prompt.
     alertFlag = true;
-    (drumkitStatus == FILE_ACTIVE) ? alertType = ALERT_OVERWRITEDRUMKIT : alertType = ALERT_SAVEDRUMKIT;
+    ((drumkitStatus == FILE_ACTIVE) || (drumkitStatus == FILE_INCOMPATIBLE)) ? alertType = ALERT_OVERWRITEDRUMKIT : alertType = ALERT_SAVEDRUMKIT;
 
     // 2. ALERT RENDER
     // Draw save confirmation overlay.
@@ -13517,11 +13398,11 @@ void Controller::drumkit_saveAction() {
 }
 
 void Controller::drumkit_clearSelect() {
-    /// @brief Opens clear confirmation alert when selected drumkit slot is not inactive.
+    /// @brief Opens clear confirmation alert when the selected kit has a Kit.rwd settings file.
 
     // 1. PRECONDITION CHECK
-    // Show clear confirmation only for non-empty/non-inactive slots.
-    if (drumkitStatus != FILE_INACTIVE) {
+    // Clear removes only Kit.rwd; samples-only kits have nothing to clear.
+    if ((drumkitStatus == FILE_ACTIVE) || (drumkitStatus == FILE_INCOMPATIBLE)) {
         // 2. ALERT STATE CONFIGURATION
         // Configure clear action prompt and enable alert rendering.
         alertFlag = true;
@@ -19120,15 +19001,13 @@ void Controller::layerInst_setInstSelected(uint8_t layerNum_, int16_t inst_) {
             if ((f_open(&sd.file, "System/Data/Inst.lib", FA_READ) == FR_OK) && (f_lseek(&sd.file, 25 + (layer.instSelected * 32)) == FR_OK) && (f_read(&sd.file, temp, kFileNameSize, &sd.bytesread) == FR_OK)) {
                 f_close(&sd.file);
 
-                // Construct file path
-                strcpy(layer.instSelectedData.fileName, "System/Data/");
-                strncat(layer.instSelectedData.fileName, temp, kFileNameSize);
-                strncat(layer.instSelectedData.fileName, ".ins", 4);
+                // Construct index file path (Sample/ or Kits/ entry)
+                temp[kFileNameSize] = 0;
+                sd_buildInstIndexPath(temp, layer.instSelectedData.fileName, sizeof(layer.instSelectedData.fileName));
 
-                // Construct folder path
-                strcpy(layer.instSelectedData.folderName, "Sample/");
-                strncat(layer.instSelectedData.folderName, temp, kFileNameSize);
-                strncat(layer.instSelectedData.folderName, "/", 1);
+                // Construct folder path (with trailing slash)
+                sd_buildInstFolderPath(temp, layer.instSelectedData.folderName, sizeof(layer.instSelectedData.folderName) - 1);
+                strcat(layer.instSelectedData.folderName, "/");
 
                 // Copy full name
                 strncpy(layer.instSelectedData.nameLong, temp, kFileNameSize);
@@ -19747,6 +19626,9 @@ void Controller::layerInst_setSampleLoaded(uint8_t layerNum_) {
         // Force full graph redraw when loaded sample reference changes.
         bool sampleChanged = (prevSampleLoaded != layer.sampleLoaded) || (memcmp(prevSampleLoadedFileName, layer.sampleLoadedData.fileName, sizeof(prevSampleLoadedFileName)) != 0);
         if (sampleChanged) resetLayerInstGraphCache(layerNum_);
+
+        // Kit layers are labelled by sample name in the layer grid, so refresh it too.
+        if (sampleChanged) lcd_drawLayerTab_InstData(layerNum_);
 
         // 5. UI REFRESH & DEBUG VIEW
         // Update visible sample/graph widgets when Layer Inst menu is active.
